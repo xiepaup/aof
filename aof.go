@@ -63,6 +63,18 @@ func (reader bufioReader) readLine() (s string, err error) {
 	return
 }
 
+
+func (reader bufioReader) readNBytes(n int) (string, error) {
+        buf := make([]byte, n+2)
+        m, err := io.ReadFull(reader.input, buf)
+        if err != nil {
+                fmt.Println("read full failed : ", m, err)
+                return "", err
+        }
+        return string(buf[:n]), nil
+}
+
+
 func (reader bufioReader) readParameter() (s string, err error) {
 	// read parameter length
 	str, err := reader.readLine()
@@ -85,7 +97,8 @@ func (reader bufioReader) readParameter() (s string, err error) {
 		return
 	}
 	// read parameter
-	str, err = reader.readLine()
+	//str, err = reader.readLine()
+	str, err = reader.readNBytes(size)
 	if err != nil {
 		return
 	}
